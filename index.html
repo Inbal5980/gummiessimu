@@ -122,16 +122,47 @@
             gap: 1vw;
         }
         
+        /* שינוי תצוגה לעמודות כדי שהשורות יסתדרו אחת מתחת לשנייה */
         .gummy-display {
             display: flex;
-            flex-wrap: wrap;
-            gap: 0.5vh;
+            flex-direction: column; 
+            gap: 1vh;
             padding: 1vh;
             background: rgba(255, 255, 255, 0.5);
             border-radius: 1vh;
-            transition: background-color 0.3s;
         }
         
+        /* עיצוב שורות של 10 */
+        .ten-group {
+            display: flex;
+            flex-wrap: wrap; /* למקרה שזה מסך צר מאוד */
+            gap: 0.5vw;
+            padding: 0.5vh 1vw;
+            background-color: rgba(255, 255, 255, 0.6);
+            border-radius: 50px; /* צורת "נקניק" או שורה מעוגלת */
+            align-items: center;
+            width: fit-content;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+
+        /* שורה מלאה של 10 - ניתנת ללחיצה */
+        .ten-group.full-ten {
+            cursor: pointer;
+            border-color: rgba(0,0,0,0.1);
+        }
+
+        .ten-group.full-ten:hover {
+            background-color: rgba(255, 215, 0, 0.2);
+            border-color: #FFD700;
+            transform: scale(1.02);
+        }
+
+        /* שורת שארית (יחידות) */
+        .ten-group.remainder {
+            background-color: transparent;
+        }
+
         .gummy {
             font-size: 2.8vh;
             transition: all 0.2s;
@@ -140,19 +171,18 @@
             position: relative;
         }
         
-        .gummy:hover {
-            transform: scale(1.2);
+        /* אפקט לדובון בודד בשורת יחידות */
+        .ten-group.remainder .gummy:hover {
+            transform: scale(1.3);
             z-index: 5;
         }
         
-        /* סגנון לדובון שנבחר/נספר */
         .gummy.counted {
             opacity: 0.4;
             transform: scale(0.85);
-            filter: grayscale(100%) !important; /* מבטל את הצבע */
+            filter: grayscale(100%) !important;
         }
 
-        /* סימון וי קטן על דובון שנבחר */
         .gummy.counted::after {
             content: '✓';
             position: absolute;
@@ -169,10 +199,6 @@
             align-items: center;
             justify-content: center;
             box-shadow: 0 0 5px rgba(0,0,0,0.2);
-        }
-        
-        .gummy:active {
-            transform: scale(0.9);
         }
         
         .green { 
@@ -219,7 +245,7 @@
             font-size: 2.5vh;
             font-weight: bold;
             flex-wrap: wrap;
-            direction: ltr; /* שינוי כיוון התרגיל למשמאל לימין */
+            direction: ltr;
         }
         
         .input-group {
@@ -235,10 +261,10 @@
         }
         
         .calc-input {
-            width: 8vw; /* הגדלת הרוחב */
-            min-width: 90px; /* הגדלת רוחב מינימלי למסכים קטנים */
+            width: 12vw;
+            min-width: 100px;
             padding: 1vh;
-            font-size: 3vh; /* הגדלת הגופן מעט */
+            font-size: 3vh;
             text-align: center;
             border: 0.3vh solid #FF69B4;
             border-radius: 1vh;
@@ -247,7 +273,6 @@
             transition: all 0.3s;
         }
 
-        /* אנימציה לשדה שמתעדכן */
         .calc-input.updated {
             background-color: #FFFACD;
             transform: scale(1.1);
@@ -363,7 +388,7 @@
             <div class="question">
                 בַּאֲרוֹן הַנִּסּוּיִים נִמְצְאוּ דֻּבּוֹנֵי גּוּמִי בְּצְבָעִים שׁוֹנִים.<br>
                 <strong>בְּכַמָּה קָטָן מִסְפַּר דֻּבּוֹנֵי הַגּוּמִי הַיְּרֻקִּים מִמִּסְפַּר דֻּבּוֹנֵי הַגּוּמִי הָאֲדֻמִּים?</strong>
-                <div class="hint-text">👆 טִיפּ: לַחֲצוּ עַל הַדֻּבּוֹנִים אֶחָד-אֶחָד כְּדֵי לִסְפֹּר אוֹתָם! 👆</div>
+                <div class="hint-text">👆 טִיפּ: לַחֲצוּ עַל שׁוּרוֹת הַ-10 כְּדֵי לִסְפֹּר מַהֵר יוֹתֵר! 👆</div>
             </div>
         </div>
         
@@ -372,22 +397,23 @@
             <!-- אזור הדובונים -->
             <div class="gummy-area">
                 <div class="gummy-section">
-                    <h3 class="green">🐻 דֻּבּוֹנֵי גּוּמִי יְרֻקִּים: 23</h3>
+                    <!-- הוסרו האייקונים מהכותרות -->
+                    <h3 class="green">דֻּבּוֹנֵי גּוּמִי יְרֻקִּים: 23</h3>
                     <div class="gummy-display" id="greenGummies"></div>
                 </div>
                 
                 <div class="gummy-section">
-                    <h3 class="red">🐻 דֻּבּוֹנֵי גּוּמִי אֲדֻמִּים: 42</h3>
+                    <h3 class="red">דֻּבּוֹנֵי גּוּמִי אֲדֻמִּים: 42</h3>
                     <div class="gummy-display" id="redGummies"></div>
                 </div>
                 
                 <div class="gummy-section">
-                    <h3 class="blue">🐻 דֻּבּוֹנֵי גּוּמִי כְּחֻלִּים: 10</h3>
+                    <h3 class="blue">דֻּבּוֹנֵי גּוּמִי כְּחֻלִּים: 10</h3>
                     <div class="gummy-display" id="blueGummies"></div>
                 </div>
                 
                 <div class="gummy-section">
-                    <h3>🐍 נַחֲשֵׁי גּוּמִי: 2</h3>
+                    <h3>נַחֲשֵׁי גּוּמִי: 2</h3>
                     <div class="gummy-display" id="snakes"></div>
                 </div>
             </div>
@@ -423,63 +449,94 @@
     </div>
 
     <script>
-        // יצירת דובוני גומי עם יכולת הקלקה וספירה
+        // יצירת דובוני גומי בקבוצות של 10
         function createGummies(containerId, count, color, emoji, targetInputId) {
             const container = document.getElementById(containerId);
             container.innerHTML = '';
             
-            for (let i = 0; i < count; i++) {
-                const gummy = document.createElement('span');
-                gummy.className = `gummy ${color}`;
-                gummy.textContent = emoji;
+            // פונקציית עזר לעדכון הסך הכל בשדה הקלט
+            const updateInput = () => {
+                if (!targetInputId) return;
+                const input = document.getElementById(targetInputId);
+                const total = container.querySelectorAll('.gummy.counted').length;
                 
-                // הוספת אירוע לחיצה לכל דובון בנפרד
-                if (targetInputId) {
-                    gummy.onclick = function() {
-                        toggleGummyCount(this, targetInputId);
+                input.value = total > 0 ? total : '';
+                
+                // אנימציה לשדה
+                input.classList.remove('updated');
+                void input.offsetWidth; 
+                input.classList.add('updated');
+                setTimeout(() => input.classList.remove('updated'), 500);
+            };
+
+            let bearsCreated = 0;
+            
+            // יצירת שורות
+            while (bearsCreated < count) {
+                // בדיקה אם נשארו לפחות 10 ליצירת שורה מלאה
+                const isFullTen = (count - bearsCreated) >= 10;
+                const groupSize = isFullTen ? 10 : (count - bearsCreated);
+                
+                // יצירת מיכל לשורה
+                const rowDiv = document.createElement('div');
+                rowDiv.className = 'ten-group';
+                if (isFullTen) rowDiv.classList.add('full-ten');
+                else rowDiv.classList.add('remainder');
+                
+                // הוספת לחיצה על כל השורה (רק אם זו שורה של 10 ורלוונטית לחישוב)
+                if (isFullTen && targetInputId) {
+                    rowDiv.title = 'לחצו כדי לסמן 10 דובונים';
+                    rowDiv.onclick = function() {
+                        const allBears = rowDiv.querySelectorAll('.gummy');
+                        const currentlySelected = rowDiv.querySelectorAll('.gummy.counted').length;
+                        
+                        // אם כולם כבר מסומנים - בטל סימון. אחרת - סמן את כולם.
+                        const shouldSelect = currentlySelected < 10;
+                        
+                        allBears.forEach(bear => {
+                            if (shouldSelect) bear.classList.add('counted');
+                            else bear.classList.remove('counted');
+                        });
+                        
+                        playSound(shouldSelect ? 'pop-up' : 'pop-down');
+                        updateInput();
                     };
-                    gummy.title = `לחצו כדי לספור`;
                 }
 
-                container.appendChild(gummy);
+                // יצירת הדובונים בתוך השורה
+                for (let i = 0; i < groupSize; i++) {
+                    const gummy = document.createElement('span');
+                    gummy.className = `gummy ${color}`;
+                    gummy.textContent = emoji;
+                    
+                    // אם זו לא שורה מלאה (יחידות), מאפשרים לחיצה בודדת
+                    if (!isFullTen && targetInputId) {
+                        gummy.title = 'לחצו כדי לספור';
+                        gummy.onclick = function(e) {
+                            e.stopPropagation(); // מונע אירועים מתנגשים
+                            if (this.classList.contains('counted')) {
+                                this.classList.remove('counted');
+                                playSound('pop-down');
+                            } else {
+                                this.classList.add('counted');
+                                playSound('pop-up');
+                            }
+                            updateInput();
+                        };
+                    }
+                    
+                    rowDiv.appendChild(gummy);
+                    bearsCreated++;
+                }
+                
+                container.appendChild(rowDiv);
             }
-        }
-        
-        // פונקציה לספירה/ביטול ספירה של דובון
-        function toggleGummyCount(gummyElement, inputId) {
-            const input = document.getElementById(inputId);
-            let currentValue = parseInt(input.value) || 0;
-            
-            // בדיקה אם הדובון כבר נספר
-            if (gummyElement.classList.contains('counted')) {
-                // ביטול ספירה
-                gummyElement.classList.remove('counted');
-                currentValue = Math.max(0, currentValue - 1); // מונע מספרים שליליים
-                playSound('pop-down'); // צליל שונה לביטול
-            } else {
-                // ספירה חדשה
-                gummyElement.classList.add('counted');
-                currentValue++;
-                playSound('pop-up');
-            }
-            
-            // עדכון המספר בשדה
-            input.value = currentValue > 0 ? currentValue : '';
-            
-            // אנימציה לשדה
-            input.classList.remove('updated');
-            void input.offsetWidth; 
-            input.classList.add('updated');
-            
-            setTimeout(() => {
-                input.classList.remove('updated');
-            }, 500);
         }
 
         window.onload = function() {
             createGummies('greenGummies', 23, 'green', '🐻', 'greenInput');
             createGummies('redGummies', 42, 'red', '🐻', 'redInput');
-            // כחולים ונחשים ללא ספירה פעילה בתרגיל זה
+            // כחולים ונחשים ללא אינטראקציה של חישוב כרגע
             createGummies('blueGummies', 10, 'blue', '🐻', null);
             createGummies('snakes', 2, '', '🐍', null);
         };
@@ -497,15 +554,15 @@
             }
             
             if (redInput === 42 && greenInput === 23 && resultInput === 19) {
-                feedback.innerHTML = '<div class="result">🎉 כָּל הַכָּבוֹד! הַתְּשׁוּבָה נְכוֹנָה!<br>42 - 23 = 19<br>יֵשׁ 19 יְרֻקִּים פָּחוֹת מֵאֲדֻמִּים! 🍬</div>';
+                feedback.innerHTML = '<div class="result">🎉 כָּל הַכָּבוֹד! הַתְּשׁוּבָה נְכוֹנָה!<br><span dir="ltr" style="display:inline-block; direction: ltr;">42 - 23 = 19</span><br>יֵשׁ 19 יְרֻקִּים פָּחוֹת מֵאֲדֻמִּים! 🍬</div>';
                 playSound('success');
             } else {
                 let errorMsg = '❌ לֹא מְדֻיָּק. נַסּוּ שׁוּב!<br>';
                 
                 if (redInput !== 42) {
-                    errorMsg += '<span style="font-size:0.8em">טָעוּת בַּאֲדֻמִּים (סִפְרוּ שׁוּב אֶת כֻּלָּם!)</span><br>';
+                    errorMsg += '<span style="font-size:0.8em">טָעוּת בַּאֲדֻמִּים (סִפְרוּ שׁוּב אֶת הָעֲשָׂרוֹת וְהַיְּחִידוֹת!)</span><br>';
                 } else if (greenInput !== 23) {
-                    errorMsg += '<span style="font-size:0.8em">טָעוּת בַּיְּרֻקִּים (סִפְרוּ שׁוּב אֶת כֻּלָּם!)</span><br>';
+                    errorMsg += '<span style="font-size:0.8em">טָעוּת בַּיְּרֻקִּים (סִפְרוּ שׁוּב אֶת הָעֲשָׂרוֹת וְהַיְּחִידוֹת!)</span><br>';
                 } else if (resultInput !== 19) {
                     errorMsg += '<span style="font-size:0.8em">הַמִּסְפָּרִים נְכוֹנִים. כַּמָּה זֶה 42 פָּחוֹת 23?</span>';
                 }
@@ -540,7 +597,6 @@
                     osc.start(now);
                     osc.stop(now + 0.6);
                 } else if (type === 'pop-up') {
-                    // צליל עולה לספירה
                     osc.type = 'triangle';
                     osc.frequency.setValueAtTime(400, now);
                     osc.frequency.linearRampToValueAtTime(600, now + 0.1);
@@ -549,7 +605,6 @@
                     osc.start(now);
                     osc.stop(now + 0.1);
                 } else if (type === 'pop-down') {
-                    // צליל יורד לביטול
                     osc.type = 'triangle';
                     osc.frequency.setValueAtTime(600, now);
                     osc.frequency.linearRampToValueAtTime(400, now + 0.1);
