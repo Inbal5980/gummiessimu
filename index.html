@@ -122,7 +122,6 @@
             gap: 1vw;
         }
         
-        /* שינוי תצוגה לעמודות כדי שהשורות יסתדרו אחת מתחת לשנייה */
         .gummy-display {
             display: flex;
             flex-direction: column; 
@@ -132,21 +131,19 @@
             border-radius: 1vh;
         }
         
-        /* עיצוב שורות של 10 */
         .ten-group {
             display: flex;
-            flex-wrap: wrap; /* למקרה שזה מסך צר מאוד */
+            flex-wrap: wrap; 
             gap: 0.5vw;
             padding: 0.5vh 1vw;
             background-color: rgba(255, 255, 255, 0.6);
-            border-radius: 50px; /* צורת "נקניק" או שורה מעוגלת */
+            border-radius: 50px; 
             align-items: center;
             width: fit-content;
             transition: all 0.2s;
             border: 2px solid transparent;
         }
 
-        /* שורה מלאה של 10 - ניתנת ללחיצה */
         .ten-group.full-ten {
             cursor: pointer;
             border-color: rgba(0,0,0,0.1);
@@ -158,7 +155,6 @@
             transform: scale(1.02);
         }
 
-        /* שורת שארית (יחידות) */
         .ten-group.remainder {
             background-color: transparent;
         }
@@ -171,7 +167,6 @@
             position: relative;
         }
         
-        /* אפקט לדובון בודד בשורת יחידות */
         .ten-group.remainder .gummy:hover {
             transform: scale(1.3);
             z-index: 5;
@@ -244,7 +239,7 @@
             gap: 1vw;
             font-size: 2.5vh;
             font-weight: bold;
-            flex-wrap: wrap;
+            flex-wrap: nowrap; /* שינוי חשוב: מונע שבירת שורה */
             direction: ltr;
         }
         
@@ -262,7 +257,7 @@
         
         .calc-input {
             width: 12vw;
-            min-width: 100px;
+            min-width: 80px; /* הקטנה קלה כדי למנוע גלישה */
             padding: 1vh;
             font-size: 3vh;
             text-align: center;
@@ -397,7 +392,6 @@
             <!-- אזור הדובונים -->
             <div class="gummy-area">
                 <div class="gummy-section">
-                    <!-- הוסרו האייקונים מהכותרות -->
                     <h3 class="green">דֻּבּוֹנֵי גּוּמִי יְרֻקִּים: 23</h3>
                     <div class="gummy-display" id="greenGummies"></div>
                 </div>
@@ -449,12 +443,10 @@
     </div>
 
     <script>
-        // יצירת דובוני גומי בקבוצות של 10
         function createGummies(containerId, count, color, emoji, targetInputId) {
             const container = document.getElementById(containerId);
             container.innerHTML = '';
             
-            // פונקציית עזר לעדכון הסך הכל בשדה הקלט
             const updateInput = () => {
                 if (!targetInputId) return;
                 const input = document.getElementById(targetInputId);
@@ -462,7 +454,6 @@
                 
                 input.value = total > 0 ? total : '';
                 
-                // אנימציה לשדה
                 input.classList.remove('updated');
                 void input.offsetWidth; 
                 input.classList.add('updated');
@@ -471,26 +462,21 @@
 
             let bearsCreated = 0;
             
-            // יצירת שורות
             while (bearsCreated < count) {
-                // בדיקה אם נשארו לפחות 10 ליצירת שורה מלאה
                 const isFullTen = (count - bearsCreated) >= 10;
                 const groupSize = isFullTen ? 10 : (count - bearsCreated);
                 
-                // יצירת מיכל לשורה
                 const rowDiv = document.createElement('div');
                 rowDiv.className = 'ten-group';
                 if (isFullTen) rowDiv.classList.add('full-ten');
                 else rowDiv.classList.add('remainder');
                 
-                // הוספת לחיצה על כל השורה (רק אם זו שורה של 10 ורלוונטית לחישוב)
                 if (isFullTen && targetInputId) {
                     rowDiv.title = 'לחצו כדי לסמן 10 דובונים';
                     rowDiv.onclick = function() {
                         const allBears = rowDiv.querySelectorAll('.gummy');
                         const currentlySelected = rowDiv.querySelectorAll('.gummy.counted').length;
                         
-                        // אם כולם כבר מסומנים - בטל סימון. אחרת - סמן את כולם.
                         const shouldSelect = currentlySelected < 10;
                         
                         allBears.forEach(bear => {
@@ -503,17 +489,15 @@
                     };
                 }
 
-                // יצירת הדובונים בתוך השורה
                 for (let i = 0; i < groupSize; i++) {
                     const gummy = document.createElement('span');
                     gummy.className = `gummy ${color}`;
                     gummy.textContent = emoji;
                     
-                    // אם זו לא שורה מלאה (יחידות), מאפשרים לחיצה בודדת
                     if (!isFullTen && targetInputId) {
                         gummy.title = 'לחצו כדי לספור';
                         gummy.onclick = function(e) {
-                            e.stopPropagation(); // מונע אירועים מתנגשים
+                            e.stopPropagation();
                             if (this.classList.contains('counted')) {
                                 this.classList.remove('counted');
                                 playSound('pop-down');
@@ -536,7 +520,6 @@
         window.onload = function() {
             createGummies('greenGummies', 23, 'green', '🐻', 'greenInput');
             createGummies('redGummies', 42, 'red', '🐻', 'redInput');
-            // כחולים ונחשים ללא אינטראקציה של חישוב כרגע
             createGummies('blueGummies', 10, 'blue', '🐻', null);
             createGummies('snakes', 2, '', '🐍', null);
         };
